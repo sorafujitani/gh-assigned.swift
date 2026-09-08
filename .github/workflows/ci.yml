@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  macos:
+    runs-on: macos-14
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Swift 6.3.2
+        uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: 6.3.2
+      - name: Build, test, release build, and smoke test
+        run: ./scripts/verify.sh
+
+  linux:
+    runs-on: ubuntu-24.04
+    container:
+      image: swift:6.3.2
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Install smoke-test runtime
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends python3 python3-venv
+      - name: Build, test, release build, and smoke test
+        env:
+          VERIFY_SCRATCH_PATH: /tmp/gh-assigned-verify
+        run: ./scripts/verify.sh

@@ -31,6 +31,10 @@ playground.xcworkspace
 
 .build/
 
+# Python smoke-test bytecode
+__pycache__/
+*.pyc
+
 # CocoaPods
 #
 # We recommend against adding the Pods directory to your .gitignore. However
